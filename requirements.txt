@@ -2,3 +2,4 @@ fastapi[all]
 joblib
 pydantic
 pathlib
+scikit-learn
