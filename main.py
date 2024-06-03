@@ -47,6 +47,6 @@ def heart_prediction(input_parameters: ModelInput):
     
     # Tahmin sonucuna göre dönüş yapma
     if prediction[0] == 0:
-        return 'Bu kişi sağlıklı'
+        return 0
     else:
-        return 'Bu kişide kalp krizi riski var!'
+        return 1
