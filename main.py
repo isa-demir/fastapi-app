@@ -1,4 +1,3 @@
-from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
@@ -22,11 +21,14 @@ class ModelInput(BaseModel):
     caa: int
     thall: int
 
-
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 
-with open(f"{BASE_DIR}/ml_model.pkl", "rb") as f:
-    heart_attack_model = joblib.load(f)
+# Modeli ve scaler'ı yükleme
+with open(f"{BASE_DIR}/ml_model.pkl", "rb") as model_file:
+    heart_attack_model = joblib.load(model_file)
+
+with open(f"{BASE_DIR}/scaler.pkl", "rb") as scaler_file:
+    scaler = joblib.load(scaler_file)
 
 # API endpoint'i tanımlama
 @app.post('/heart_prediction')
@@ -42,11 +44,14 @@ def heart_prediction(input_parameters: ModelInput):
                   input_data_dict["oldpeak"], input_data_dict["slp"], input_data_dict["caa"], 
                   input_data_dict["thall"]]
     
+    # Verileri ölçeklendirme
+    input_list_scaled = scaler.transform([input_list])
+    
     # Modelin tahmin yapması
-    prediction = heart_attack_model.predict([input_list])
+    prediction = heart_attack_model.predict(input_list_scaled)
     
     # Tahmin sonucuna göre dönüş yapma
     if prediction[0] == 0:
-        return 0
+        return '0'
     else:
-        return 1
+        return '1'
