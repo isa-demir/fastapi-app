@@ -8,6 +8,7 @@ app = FastAPI()
 # API'ye aşağıdaki formatta veri beklediğimizi belirtiyoruz.
 # Bu model girdilerimizi uygulayacağımız model
 class ModelInput(BaseModel):
+    age: int
     sex: int
     cp: int
     trtbps: int
@@ -38,7 +39,7 @@ def heart_prediction(input_parameters: ModelInput):
     input_data_dict = input_parameters.dict()
     
     # Modelin tahmin yapması için gerekli olan veri listesini oluşturma
-    input_list = [input_data_dict["sex"], input_data_dict["cp"], 
+    input_list = [input_data_dict["age"], input_data_dict["sex"], input_data_dict["cp"], 
                   input_data_dict["trtbps"], input_data_dict["chol"], input_data_dict["fbs"], 
                   input_data_dict["restecg"], input_data_dict["thalachh"], input_data_dict["exng"], 
                   input_data_dict["oldpeak"], input_data_dict["slp"], input_data_dict["caa"], 
